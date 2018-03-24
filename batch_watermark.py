@@ -36,7 +36,7 @@ def main():
                     if int(args.resize) < 100:
                         #Scale down the image
                         print('resizing to %s%% of original' % (args.resize))
-                        os.system('convert -resize %d %s %s' % (int(args.resize), new_name, new_name))
+                        os.system('convert -resize %d%% %s %s' % (int(args.resize), new_name, new_name))
 
     print("Files Processed: %s" % "{:,}".format(files_processed))
     print("Files Watermarked: %s" % "{:,}".format(files_watermarked))
