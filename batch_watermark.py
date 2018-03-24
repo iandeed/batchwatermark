@@ -35,11 +35,11 @@ def main():
                     os.system('composite -dissolve 70%% -gravity %s %s "%s" "%s"' % (args.position, args.watermark, orig, new_name))
                     if int(args.resize) < 100:
                         #Scale down the image
-                        print('resizing to %s%% of original' % (args.resize))
                         os.system('convert -resize %d%% %s %s' % (int(args.resize), new_name, new_name))
 
     print("Files Processed: %s" % "{:,}".format(files_processed))
     print("Files Watermarked: %s" % "{:,}".format(files_watermarked))
+    print('Files resized to %s%% of original' % (args.resize))
 
 if __name__ == '__main__':
     main()
