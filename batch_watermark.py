@@ -18,6 +18,13 @@ def main():
 
     files_processed = 0
     files_watermarked = 0
+    files_resized = 0
+
+    file_count = 0;
+
+    for dirName, subdirList, fileList in os.walk(args.root):
+        file_count = len(fileList);
+
     for dirName, subdirList, fileList in os.walk(args.root):
         if args.exclude is not None and args.exclude in dirName:
             continue
@@ -30,15 +37,24 @@ def main():
                 orig = os.path.join(dirName, fname)
                 new_name = os.path.join(dirName, '%s.%s' % (os.path.basename(fname).split('.')[0] + args.name, ext))
                 if not os.path.exists(new_name):
-                    files_watermarked += 1
+                    print( 'File  %d of %d' % (files_processed, file_count))
                     print('    Convert %s to %s' % (orig, new_name))
-                    os.system('composite -dissolve 70%% -gravity %s %s "%s" "%s"' % (args.position, args.watermark, orig, new_name))
+                    if((args.watermark != "none") and  (args.watermark != "NONE") and (args.watermark != "None")):
+                        files_watermarked += 1
+                        os.system('composite -dissolve 70%% -gravity %s %s "%s" "%s"' % (args.position, args.watermark, orig, new_name))
+                    else:
+                        os.system('cp "%s" "%s"' % (orig, new_name))
+
                     if int(args.resize) < 100:
                         #Scale down the image
+                        files_resized += 1;
                         os.system('convert -resize %d%% %s %s' % (int(args.resize), new_name, new_name))
 
+    print("Script Complete")
     print("Files Processed: %s" % "{:,}".format(files_processed))
     print("Files Watermarked: %s" % "{:,}".format(files_watermarked))
+    print("Files Resized: %s" % "{:,}".format(files_resized))
+
     print('Files resized to %s%% of original' % (args.resize))
 
 if __name__ == '__main__':
