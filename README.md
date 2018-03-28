@@ -5,6 +5,8 @@ Usage: python batch_watermark.py --root [Path to images folder] --watermark [pat
 
 - This will copy each image in the folder adding the watermark image specified over the center of the new copy.  Output image filenames will be appended with: "-watermark".
 
+- Watermark may be set to 'none' wich will skip the watermarking step and resize images only
+
 Additional usage: python batch_watermark.py --root [Path to images folder] --watermark [path to watermark image] --name [Preffered appendix for files, replaces "-watermark"]
 							--extension [Image extensions to look out for]  --position [Preferred position of watermark EG. north, south, east, west, center, southeast, etc]
 							--resize [Percentage image copy should be to original image i.e 50 - half size]  --exclude [path content to exclude from watermarking]
