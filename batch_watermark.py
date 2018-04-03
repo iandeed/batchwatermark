@@ -16,15 +16,19 @@ def main():
 
     args = parser.parse_args()
 
+
     files_processed = 0
     files_watermarked = 0
     files_resized = 0
 
+    directories_proccessed = 0;
     file_count = 0;
+    dir_count = 0;
 
     for dirName, subdirList, fileList in os.walk(args.root):
         # List the files in the directory to get a count of the number of files to be processed
-        file_count = len(fileList);
+        file_count += len(fileList);
+        dir_count += len(subdirList);
 
     for dirName, subdirList, fileList in os.walk(args.root):
         if args.exclude is not None and args.exclude in dirName:
@@ -38,7 +42,7 @@ def main():
                 orig = os.path.join(dirName, fname)
                 new_name = os.path.join(dirName, '%s.%s' % (os.path.basename(fname).split('.')[0] + args.name, ext))
                 if not os.path.exists(new_name):
-                    print( 'File  %d of %d' % (files_processed, file_count))
+                    print( 'File  %d of %d directory %d of %d' % (files_processed, file_count, directories_proccessed, dir_count))
                     print('    Convert %s to %s' % (orig, new_name))
                     if((args.watermark != "none") and  (args.watermark != "NONE") and (args.watermark != "None")):
                         files_watermarked += 1
@@ -50,6 +54,9 @@ def main():
                         #Scale down the image
                         files_resized += 1;
                         os.system('convert -resize %d%% %s %s' % (int(args.resize), new_name, new_name))
+
+        #Finished processing current directory
+        directories_proccessed += 1;
 
     print("Script Complete")
     print("Files Processed: %s" % "{:,}".format(files_processed))
