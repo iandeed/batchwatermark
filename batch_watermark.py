@@ -23,6 +23,7 @@ def main():
     file_count = 0;
 
     for dirName, subdirList, fileList in os.walk(args.root):
+        # List the files in the directory to get a count of the number of files to be processed
         file_count = len(fileList);
 
     for dirName, subdirList, fileList in os.walk(args.root):
