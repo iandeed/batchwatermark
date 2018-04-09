@@ -12,6 +12,7 @@ def main():
     parser.add_argument('--extension', help='Image extensions to look for', default=".jpg", type=str)
     parser.add_argument('--position', help='Cardinal position to place the watermark', default="center", type=str)
     parser.add_argument('--resize', help='Percentage by which to resize the image', default="100", type=str)
+    parser.add_argument('--output', help='Path to output resized files to', default="", type=str)
     parser.add_argument('--exclude', help='Path content to exclude', type=str)
 
     args = parser.parse_args()
@@ -24,6 +25,10 @@ def main():
     directories_proccessed = 0;
     file_count = 0;
     dir_count = 0;
+
+    if not (os.path.exists(args.output)):
+        # If the path described in the output command does not exist, attempt to create it
+        os.system('mkdir %s ' % args.output)
 
     for dirName, subdirList, fileList in os.walk(args.root):
         # List the files in the directory to get a count of the number of files to be processed
@@ -40,7 +45,12 @@ def main():
             if args.extension in fname and args.watermark not in fname and args.name not in fname:
                 ext = '.'.join(os.path.basename(fname).split('.')[1:])
                 orig = os.path.join(dirName, fname)
-                new_name = os.path.join(dirName, '%s.%s' % (os.path.basename(fname).split('.')[0] + args.name, ext))
+
+                if args.output != "":
+                    new_name = os.path.join(args.output, '%s.%s' % (os.path.basename(fname).split('.')[0] + args.name, ext))
+                else:
+                    new_name = os.path.join(dirName, '%s.%s' % (os.path.basename(fname).split('.')[0] + args.name, ext))
+
                 if not os.path.exists(new_name):
                     print( 'File  %d of %d directory %d of %d' % (files_processed, file_count, directories_proccessed, dir_count))
                     print('    Convert %s to %s' % (orig, new_name))
